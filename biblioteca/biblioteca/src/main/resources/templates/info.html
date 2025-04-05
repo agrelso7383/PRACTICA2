@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Info - Virtual Library</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Custom CSS -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body {
+      background-color: #f7f9fc;
+      color: #495057;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-top: 40px;
+      text-align: center;
+      color: #007bff;
+    }
+
+    h2 {
+      font-size: 2;
+      font-weight: bold;
+      margin-top: 40px;
+      text-align: center;
+      color: #000000;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .info-section {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .info-card {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      width: 320px;
+      min-height: 460px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 20px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .info-card h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #007bff;
+    }
+
+    .info-card p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #495057;
+    }
+
+    .info-card .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .info-card .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .info-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Virtual Library Info</h1>
+  <h2>In this section you can edit and manage whatever you want according to our web.</h2>
+
+  <div class="container">
+    <div class="info-section">
+ 
+      <div class="info-card">
+        <img src="/images/users.png" alt="Users Icon">
+        <h3>Manage Users</h3>
+        <p>Create, edit, or delete a user.</p>
+        <a href="/manageUsers" class="btn btn-primary">Go to Manage Users</a>
+      </div>
+>
+      <div class="info-card">
+        <img src="/images/books.jpg" alt="Books Icon">
+        <h3>Manage Books</h3>
+        <p>Create, edit, or delete as many books as you like.</p>
+        <a href="/manageBooks" class="btn btn-primary">Go to Manage Books</a>
+      </div>
+
+      <div class="info-card">
+        <img src="/images/loan.jpg" alt="Loans Icon">
+        <h3>Manage Loans</h3>
+        <p>Check your loans, edit them, or delete them if you've already returned your book.</p>
+        <a href="/manageLoans" class="btn btn-primary">Go to Manage Loans</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Virtual Library - All rights reserved.</p>
+  </footer>
+
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Virtual Library - Manage Loans</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Virtual Library</a>
+    </div>
+  </nav>
+
+  <div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">Manage Loans</h1>
+
+   
+    <div class="card mb-4">
+      <div class="card-header">
+        <h3>Add or Update Loan</h3>
+      </div>
+      <div class="card-body">
+        <form id="addLoanForm">
+          <div class="mb-3">
+            <label for="loanBook" class="form-label">Book Title</label>
+            <input type="text" class="form-control" id="loanBook" required />
+          </div>
+          <div class="mb-3">
+            <label for="loanUser" class="form-label">User Name</label>
+            <input type="text" class="form-control" id="loanUser" required />
+          </div>
+          <div class="mb-3">
+            <label for="loanDate" class="form-label">Loan Date</label>
+            <input type="text" class="form-control" id="loanDate" required />
+          </div>
+          <div class="mb-3">
+            <label for="returnDate" class="form-label">Return Date</label>
+            <input type="text" class="form-control" id="returnDate" required />
+          </div>
+
+        
+          <input type="hidden" id="editingLoanId" />
+
+          <button type="submit" class="btn btn-primary w-100" id="submitButton">Add Loan</button>
+          <button type="button" class="btn btn-info w-100 mt-2 d-none" id="updateButtonPatch">Update (PATCH)</button>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="loan-list">
+      <h3>Loan Records</h3>
+      <div id="loansContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = fetchLoans;
+
+    async function fetchLoans() {
+      const response = await fetch("/api/loans");
+      const loansData = await response.json();
+      renderLoans(loansData);
+    }
+
+    function renderLoans(loans) {
+      const container = document.getElementById("loansContainer");
+      container.innerHTML = "";
+
+      const keys = Object.keys(loans);
+      if (keys.length === 0) {
+        container.innerHTML = "<p>No loans available.</p>";
+        return;
+      }
+
+      keys.forEach(id => {
+        const loan = loans[id];
+        const loanDiv = document.createElement("div");
+        loanDiv.classList.add("loan-item", "d-flex", "justify-content-between", "align-items-center", "p-3", "bg-white", "rounded", "shadow-sm", "mb-3");
+        loanDiv.innerHTML = `
+          <span><strong>${loan.book}</strong> loaned to ${loan.user} — Loan: ${loan.loanDate} | Return: ${loan.returnDate}</span>
+          <div>
+            <button class="btn btn-sm btn-secondary me-2" onclick="loadLoanForEdit('${id}', '${loan.book}', '${loan.user}', '${loan.loanDate}', '${loan.returnDate}')">Update</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteLoan('${id}')">Delete</button>
+          </div>
+        `;
+        container.appendChild(loanDiv);
+      });
+    }
+
+    async function addLoan(event) {
+      event.preventDefault();
+
+      const book = document.getElementById("loanBook").value.trim();
+      const user = document.getElementById("loanUser").value.trim();
+      const loanDate = document.getElementById("loanDate").value.trim();
+      const returnDate = document.getElementById("returnDate").value.trim();
+
+      if (book && user && loanDate && returnDate) {
+        await fetch("/api/loans", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ book, user, loanDate, returnDate })
+        });
+
+        resetForm();
+        fetchLoans();
+      }
+    }
+
+    function loadLoanForEdit(id, book, user, loanDate, returnDate) {
+      document.getElementById("loanBook").value = book;
+      document.getElementById("loanUser").value = user;
+      document.getElementById("loanDate").value = loanDate;
+      document.getElementById("returnDate").value = returnDate;
+      document.getElementById("editingLoanId").value = id;
+
+      document.getElementById("submitButton").classList.add("d-none");
+      document.getElementById("updateButtonPatch").classList.remove("d-none");
+    }
+
+    async function updateLoanPATCH() {
+      const id = document.getElementById("editingLoanId").value;
+      const book = document.getElementById("loanBook").value.trim();
+      const user = document.getElementById("loanUser").value.trim();
+      const loanDate = document.getElementById("loanDate").value.trim();
+      const returnDate = document.getElementById("returnDate").value.trim();
+
+      const body = {};
+      if (book) body.book = book;
+      if (user) body.user = user;
+      if (loanDate) body.loanDate = loanDate;
+      if (returnDate) body.returnDate = returnDate;
+
+      if (id) {
+        await fetch(`/api/loans/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        resetForm();
+        fetchLoans();
+      }
+    }
+
+    async function deleteLoan(id) {
+      await fetch(`/api/loans/${id}`, { method: "DELETE" });
+      fetchLoans();
+    }
+
+    function resetForm() {
+      document.getElementById("addLoanForm").reset();
+      document.getElementById("editingLoanId").value = "";
+      document.getElementById("submitButton").classList.remove("d-none");
+      document.getElementById("updateButtonPatch").classList.add("d-none");
+    }
+
+    document.getElementById("addLoanForm").addEventListener("submit", addLoan);
+    document.getElementById("updateButtonPatch").addEventListener("click", updateLoanPATCH);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
