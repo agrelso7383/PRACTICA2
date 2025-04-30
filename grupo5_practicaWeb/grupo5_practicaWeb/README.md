@@ -28,6 +28,8 @@ This project was developed as part of a web development practice. Each endpoint 
 ## Authors
 
 Sofía Agrela Almagro
+
 Ignacio Bautista Llorente
-Virginiz Pérez Clemente
+
+Virginia Pérez Clemente
 
